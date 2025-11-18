@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Uniflex - Test Chatbot</title>
+</head>
+<body>
+    <h2>Tester le chatbot Uniflex</h2>
+
+    <label for="client_id">Client ID :</label>
+    <input id="client_id" type="number" value="1" />
+
+    <br><br>
+
+    <textarea id="question" rows="4" cols="60" placeholder="Posez votre question ici..."></textarea>
+    <br><br>
+
+    <button onclick="sendMessage()">Envoyer</button>
+
+    <h3>Réponse :</h3>
+    <pre id="answer" style="white-space: pre-wrap;"></pre>
+
+    <h4>Sources :</h4>
+    <pre id="sources"></pre>
+
+<script>
+function sendMessage() {
+    const msg = document.getElementById("question").value;
+    const clientId = parseInt(document.getElementById("client_id").value || "1", 10);
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            client_id: clientId,
+            message: msg
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById("answer").innerText = data.response || JSON.stringify(data, null, 2);
+        document.getElementById("sources").innerText = (data.sources || []).join(", ");
+    })
+    .catch(err => {
+        document.getElementById("answer").innerText = "Erreur : " + err;
+    });
+}
+</script>
+</body>
+</html>
