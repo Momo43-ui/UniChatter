@@ -1,108 +1,94 @@
 # services/qa_service.py
 
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from PyPDF2 import PdfReader
+import docx
 
-# On garde un cache en mémoire pour éviter de recalculer à chaque fois
-_client_indexes = {}
-
-
-class ClientIndex:
-    def __init__(self, texts, ids):
-        self.texts = texts          # liste de textes (documents ou chunks)
-        self.ids = ids              # ids en base (id document par ex.)
-        self.vectorizer = TfidfVectorizer(stop_words="french")
-        self.matrix = self.vectorizer.fit_transform(self.texts)
+DOCUMENTS_FOLDER = "documents/"
+_index_cache = None  # on garde l’index en mémoire
 
 
-def _build_index_for_client(cur, client_id):
-    """
-    Construit un index TF-IDF pour un client à partir de la table documents.
-    Table attendue : documents(id, client_id, content)
-    """
-    sql = """
-        SELECT id, content
-        FROM documents
-        WHERE client_id = %s
-    """
-    cur.execute(sql, (client_id,))
-    rows = cur.fetchall()
+def load_local_documents():
+    texts = []
+    sources = []
 
-    if not rows:
-        return None
+    for filename in os.listdir(DOCUMENTS_FOLDER):
+        path = os.path.join(DOCUMENTS_FOLDER, filename)
 
-    ids = [r[0] for r in rows]
-    texts = [r[1] for r in rows]
+        if filename.endswith(".txt"):
+            with open(path, "r", encoding="utf-8") as f:
+                texts.append(f.read())
+                sources.append(filename)
 
-    return ClientIndex(texts, ids)
+        elif filename.endswith(".pdf"):
+            try:
+                reader = PdfReader(path)
+                text = ""
+                for page in reader.pages:
+                    text += page.extract_text() + "\n"
+                texts.append(text)
+                sources.append(filename)
+            except:
+                print(f"Erreur lecture PDF : {filename}")
+
+        elif filename.endswith(".docx"):
+            try:
+                doc = docx.Document(path)
+                full_text = "\n".join([p.text for p in doc.paragraphs])
+                texts.append(full_text)
+                sources.append(filename)
+            except:
+                print(f"Erreur lecture DOCX : {filename}")
+
+    return texts, sources
 
 
-def get_answer_from_documents(cur, client_id, question, client_config, top_k=3):
-    """
-    Renvoie une réponse basée sur les documents du client.
-    1. Construit ou récupère l'index TF-IDF pour le client
-    2. Calcule la similarité de la question avec les textes
-    3. Retourne le texte le plus pertinent comme 'réponse'
-    """
+def build_index():
+    texts, sources = load_local_documents()
 
-    # 1. Récupérer ou construire l'index
-    if client_id not in _client_indexes:
-        index = _build_index_for_client(cur, client_id)
-        if index is None:
-            # Pas de documents => réponse générique
-            answer = (
-                "Je n'ai pas encore de documents pour cette entreprise, "
-                "je ne peux donc pas répondre précisément à cette question."
-            )
-            return answer, []
-        _client_indexes[client_id] = index
+    vectorizer = TfidfVectorizer(stop_words=None)
+    matrix = vectorizer.fit_transform(texts)
 
-    index = _client_indexes[client_id]
+    return {
+        "texts": texts,
+        "sources": sources,
+        "vectorizer": vectorizer,
+        "matrix": matrix
+    }
 
-    if not index.texts:
-        answer = (
-            "Je n'ai pas encore de contenu à analyser pour cette entreprise."
-        )
-        return answer, []
 
-    # 2. Vectoriser la question
-    question_vec = index.vectorizer.transform([question])
+def get_answer(question, top_k=2):
+    global _index_cache
 
-    # 3. Similarité cosinus avec tous les documents
-    sims = cosine_similarity(question_vec, index.matrix)[0]  # vecteur 1D
+    # Construire l'index une seule fois
+    if _index_cache is None:
+        _index_cache = build_index()
 
-    # 4. Obtenir les top_k indices
+    index = _index_cache
+
+    if not index["texts"]:
+        return "Aucun document chargé.", []
+
+    # Vectoriser la question
+    q_vec = index["vectorizer"].transform([question])
+
+    # Similarité cosinus
+    sims = cosine_similarity(q_vec, index["matrix"])[0]
+
     ranked = sorted(
         enumerate(sims),
         key=lambda x: x[1],
         reverse=True
     )
+
     top = ranked[:top_k]
 
-    # Si les similarités sont toutes très faibles, on peut renvoyer un message neutre
     if top[0][1] < 0.05:
-        answer = (
-            "Je n'ai pas trouvé d'information suffisamment pertinente dans les documents "
-            "pour répondre à cette question."
-        )
-        return answer, []
+        return "Je n'ai rien trouvé de pertinent dans les documents.", []
 
-    # 5. Construire une réponse simple à partir du meilleur document
-    best_idx = top[0][0]
-    best_text = index.texts[best_idx]
+    answer_text = index["texts"][top[0][0]]
+    source = index["sources"][top[0][0]]
 
-    # On peut enrichir un peu la réponse
-    style = client_config.get("style", "")
-    instructions = client_config.get("instructions", "")
-
-    answer = (
-        f"{style}\n\n"
-        f"{instructions}\n\n"
-        f"Voici ce que j'ai trouvé dans les documents de l'entreprise :\n\n"
-        f"{best_text}"
-    )
-
-    # Sources : liste d'ID de documents utilisés
-    sources = [index.ids[i] for (i, _) in top]
-
-    return answer, sources
+    return answer_text, [source]

@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# fichiers locaux
+.DS_Store
+
+# fichiers logs ou cachés
+*.log

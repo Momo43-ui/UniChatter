@@ -2,23 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Uniflex - Test Chatbot</title>
+    <title>Uniflex IA</title>
 </head>
 <body>
-    <h2>Tester le chatbot Uniflex</h2>
+    <h2>Test IA locale Uniflex</h2>
 
-    <label for="client_id">Client ID :</label>
-    <input id="client_id" type="number" value="1" />
-
-    <br><br>
-
-    <textarea id="question" rows="4" cols="60" placeholder="Posez votre question ici..."></textarea>
+    <textarea id="question" rows="4" cols="60" placeholder="Pose une question..."></textarea>
     <br><br>
 
     <button onclick="sendMessage()">Envoyer</button>
 
     <h3>Réponse :</h3>
-    <pre id="answer" style="white-space: pre-wrap;"></pre>
+    <pre id="answer"></pre>
 
     <h4>Sources :</h4>
     <pre id="sources"></pre>
@@ -26,23 +21,16 @@
 <script>
 function sendMessage() {
     const msg = document.getElementById("question").value;
-    const clientId = parseInt(document.getElementById("client_id").value || "1", 10);
 
     fetch("/chat", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            client_id: clientId,
-            message: msg
-        })
+        body: JSON.stringify({ message: msg })
     })
     .then(r => r.json())
     .then(data => {
-        document.getElementById("answer").innerText = data.response || JSON.stringify(data, null, 2);
+        document.getElementById("answer").innerText = data.response;
         document.getElementById("sources").innerText = (data.sources || []).join(", ");
-    })
-    .catch(err => {
-        document.getElementById("answer").innerText = "Erreur : " + err;
     });
 }
 </script>
