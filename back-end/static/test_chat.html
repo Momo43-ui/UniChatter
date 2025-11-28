@@ -1,311 +1,85 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Maison du Levain - Boulangerie Artisanale</title>
+    <link rel="stylesheet" href="static/style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
 
-    <style>
-      body {
-        margin: 0;
-        font-family: "Inter", Arial, sans-serif;
-        background: #faf7f2;
-        color: #333;
-      }
-
-      /* HEADER */
-      header {
-        background: #fff;
-        padding: 20px 40px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      header h1 {
-        margin: 0;
-        font-size: 26px;
-        font-weight: 700;
-        color: #8b4513;
-      }
-
-      header span {
-        font-size: 14px;
-        color: #777;
-      }
-
-      /* HERO SECTION */
-      .hero {
-        padding: 80px 40px;
-        text-align: center;
-        background: url("https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?auto=format&fit=crop&w=1350&q=80")
-          center/cover;
-        color: white;
-        position: relative;
-      }
-
-      .hero::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.45);
-      }
-
-      .hero > div {
-        position: relative;
-        z-index: 2;
-        max-width: 600px;
-        margin: auto;
-      }
-
-      .hero h2 {
-        font-size: 42px;
-        margin-bottom: 15px;
-        font-weight: 800;
-      }
-
-      .hero p {
-        font-size: 20px;
-      }
-
-      /* CHAT BUBBLE BUTTON */
-      #chat-button {
-        position: fixed;
-        bottom: 25px;
-        right: 25px;
-        background: #8b4513;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 30px;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-        transition: transform 0.2s;
-        z-index: 999;
-      }
-
-      #chat-button:hover {
-        transform: scale(1.1);
-      }
-
-      /* CHAT WINDOW */
-      #chat-window {
-        position: fixed;
-        bottom: 100px;
-        right: 25px;
-        width: 350px;
-        height: 450px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-        display: none;
-        flex-direction: column;
-        overflow: hidden;
-        animation: fadeIn 0.25s ease-in-out;
-        z-index: 998;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .chat-header {
-        padding: 15px;
-        background: #8b4513;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-        text-align: center;
-      }
-
-      .chat-messages {
-        flex: 1;
-        padding: 12px;
-        overflow-y: auto;
-        background: #fffdf9;
-      }
-
-      .msg {
-        padding: 10px 14px;
-        max-width: 85%;
-        margin-bottom: 8px;
-        border-radius: 10px;
-        line-height: 1.4;
-        white-space: pre-wrap;
-      }
-
-      .user {
-        background: #1f2937;
-        color: white;
-        margin-left: auto;
-        border-bottom-right-radius: 0;
-      }
-
-      .bot {
-        background: #f2e6d9;
-        border-bottom-left-radius: 0;
-      }
-
-      /* LOADER (...) */
-      .loader {
-        display: inline-block;
-        font-size: 22px;
-        animation: blink 1.2s infinite;
-      }
-
-      @keyframes blink {
-        0% {
-          opacity: 0.2;
-        }
-        20% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0.2;
-        }
-      }
-
-      .chat-input {
-        display: flex;
-        border-top: 1px solid #e5e5e5;
-      }
-
-      .chat-input textarea {
-        flex: 1;
-        border: none;
-        padding: 12px;
-        resize: none;
-        font-family: inherit;
-        outline: none;
-        height: 50px;
-      }
-
-      .chat-input button {
-        width: 60px;
-        background: #8b4513;
-        border: none;
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
+    <!-- Header -->
     <header>
-      <h1>La Maison du Levain</h1>
-      <span>Boulangerie & Pâtisserie Artisanale</span>
+        <a href="#" class="logo">Maison<span>Levain</span>.</a>
+        <nav>
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Nos Pains</a></li>
+                <li><a href="#">Pâtisseries</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
-      <div>
-        <h2>Bienvenue dans l'art du pain</h2>
-        <p>
-          Découvrez nos créations artisanales, façonnées avec passion chaque
-          matin.
-        </p>
-      </div>
+        <div class="hero-content">
+            <h1>L'Art du Pain Authentique</h1>
+            <p>Découvrez nos créations artisanales, façonnées avec passion et tradition chaque matin pour votre plus grand plaisir.</p>
+            <a href="#" class="btn">Découvrir le Menu</a>
+        </div>
     </section>
 
-    <!-- CHAT BUTTON -->
-    <div id="chat-button">💬</div>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">🌾</div>
+            <h3>Ingrédients Bio</h3>
+            <p>Nous sélectionnons les meilleures farines biologiques pour un goût authentique et sain.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔥</div>
+            <h3>Cuisson au Feu de Bois</h3>
+            <p>Nos pains sont cuits dans un four traditionnel pour une croûte croustillante et une mie alvéolée.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🥐</div>
+            <h3>Pâtisseries Fines</h3>
+            <p>Laissez-vous tenter par nos viennoiseries pur beurre et nos gâteaux faits maison.</p>
+        </div>
+    </section>
 
-    <!-- CHAT WINDOW -->
-    <div id="chat-window">
-      <div class="chat-header">Uniflex – Assistant</div>
-
-      <div id="chat-messages" class="chat-messages"></div>
-
-      <div class="chat-input">
-        <textarea
-          id="chat-input"
-          placeholder="Posez votre question..."
-        ></textarea>
-        <button onclick="sendMessage()">➤</button>
-      </div>
+    <!-- Chat Button -->
+    <div id="chat-button">
+        <i class="fa-solid fa-comment-dots"></i>
     </div>
 
-    <script>
-      let sessionId = null;
-      let isOpen = false;
+    <!-- Chat Window -->
+    <div id="chat-window">
+        <div class="chat-header">
+            <div class="avatar">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="chat-info">
+                <h4>Uniflex Assistant</h4>
+                <span>En ligne</span>
+            </div>
+        </div>
 
-      document.getElementById("chat-button").onclick = () => {
-        isOpen = !isOpen;
-        document.getElementById("chat-window").style.display = isOpen
-          ? "flex"
-          : "none";
-      };
+        <div id="chat-messages" class="chat-messages">
+            <div class="msg bot">Bonjour ! Je suis l'assistant virtuel de La Maison du Levain. Comment puis-je vous aider aujourd'hui ? 🥖</div>
+        </div>
 
-      function addMessage(text, who) {
-        const div = document.createElement("div");
-        div.className = `msg ${who}`;
-        div.innerText = text;
-        document.getElementById("chat-messages").appendChild(div);
-        div.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
+        <div class="chat-input-area">
+            <textarea id="chat-input" placeholder="Posez votre question..."></textarea>
+            <button id="send-btn" class="send-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
-      function showLoader() {
-        const div = document.createElement("div");
-        div.className = "msg bot";
-        div.id = "loader-msg";
-        div.innerHTML = `<span class="loader">...</span>`;
-        document.getElementById("chat-messages").appendChild(div);
-        div.scrollIntoView({ behavior: "smooth" });
-      }
-
-      function hideLoader() {
-        const loader = document.getElementById("loader-msg");
-        if (loader) loader.remove();
-      }
-
-      function sendMessage() {
-        const textarea = document.getElementById("chat-input");
-        const msg = textarea.value.trim();
-        if (!msg) return;
-
-        addMessage(msg, "user");
-        textarea.value = "";
-
-        showLoader();
-
-        fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            session_id: sessionId,
-            message: msg,
-          }),
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            hideLoader();
-
-            if (data.error) {
-              addMessage("Erreur : " + data.error, "bot");
-              return;
-            }
-
-            sessionId = data.session_id;
-            addMessage(data.response, "bot");
-          })
-          .catch((err) => {
-            hideLoader();
-            addMessage("Erreur réseau : " + err, "bot");
-          });
-      }
-    </script>
-  </body>
+    <script src="static/script.js"></script>
+</body>
 </html>
