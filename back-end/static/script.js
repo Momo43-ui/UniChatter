@@ -65,39 +65,38 @@ function initChatWidget() {
                 }),
             });
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = '';
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
 
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
+            const data = await response.json();
 
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop(); // Keep incomplete line in buffer
+            if (data.session_id) {
+                sessionId = data.session_id;
+            }
 
-                for (const line of lines) {
-                    if (!line.trim()) continue;
-                    try {
-                        const data = JSON.parse(line);
-
-                        if (data.session_id) {
-                            sessionId = data.session_id;
-                        }
-
-                        if (data.token) {
-                            botMsgDiv.innerText += data.token;
-                            scrollToBottom();
-                        }
-
-                        if (data.error) {
-                            botMsgDiv.innerText += " [Erreur: " + data.error + "]";
-                        }
-                    } catch (e) {
-                        console.error("Error parsing JSON chunk", e);
+            if (data.error) {
+                botMsgDiv.innerText = " [Erreur: " + data.error + "]";
+            } else if (data.response) {
+                // Simulation d'effet machine à écrire
+                const text = data.response;
+                let i = 0;
+                botMsgDiv.innerText = ""; // Clear potential previous content
+                
+                // Vitesse de frappe (ms)
+                const speed = 20; 
+                
+                function typeWriter() {
+                    if (i < text.length) {
+                        botMsgDiv.innerText += text.charAt(i);
+                        i++;
+                        scrollToBottom();
+                        setTimeout(typeWriter, speed);
                     }
                 }
+                typeWriter();
+            } else {
+                botMsgDiv.innerText = "(Pas de réponse)";
             }
 
         } catch (err) {
