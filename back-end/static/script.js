@@ -82,10 +82,10 @@ function initChatWidget() {
                 const text = data.response;
                 let i = 0;
                 botMsgDiv.innerText = ""; // Clear potential previous content
-                
+
                 // Vitesse de frappe (ms)
-                const speed = 20; 
-                
+                const speed = 20;
+
                 function typeWriter() {
                     if (i < text.length) {
                         botMsgDiv.innerText += text.charAt(i);
@@ -116,12 +116,12 @@ function initChatWidget() {
     });
 
     // Helper: Add Message
-    function addMessage(text, sender) {
-        const div = document.createElement('div');
-        div.className = `msg ${sender}`;
-        div.innerText = text;
-        messagesContainer.appendChild(div);
-        scrollToBottom();
+    function addMessage(text, who) {
+        const div = document.createElement("div");
+        div.className = `msg ${who}`;
+        div.textContent = text; // <- IMPORTANT
+        document.getElementById("chat-messages").appendChild(div);
+        div.scrollIntoView({ behavior: "smooth", block: "end" });
     }
 
     // Helper: Scroll to Bottom

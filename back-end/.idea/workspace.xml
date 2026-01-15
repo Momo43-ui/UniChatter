@@ -10,21 +10,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "A2nan"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;A2nan&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Momo43-ui/UniChatter.git",
-    "accountId": "2058ec06-2c6f-4728-a40e-8ce4185c6972"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Momo43-ui/UniChatter.git&quot;,
+    &quot;accountId&quot;: &quot;2058ec06-2c6f-4728-a40e-8ce4185c6972&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="35q1717NtWVMWPxdZF2FQHphz1D" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -38,7 +38,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Adnan/Desktop/UniChatter/back-end",
+    "last_opened_file_path": "C:/Users/Adnan/Desktop/Pestacle-APP-Back",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
@@ -63,6 +63,7 @@
       <option name="presentableId" value="Default" />
       <updated>1763822616698</updated>
       <workItem from="1763822617913" duration="44000" />
+      <workItem from="1765437381596" duration="26000" />
     </task>
     <servers />
   </component>
