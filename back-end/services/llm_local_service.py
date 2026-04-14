@@ -2,7 +2,7 @@ import requests
 import re
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
-MODEL_NAME = "phi3"  # recommandé pour vitesse + comportement "instruct"
+MODEL_NAME = "deepseek-r1:8b"  # recommandé pour vitesse + comportement "instruct"
 
 def generate_answer(question: str, context: str, history=None) -> str:
     if history is None:
